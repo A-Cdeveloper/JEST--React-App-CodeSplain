@@ -13,16 +13,11 @@ describe('RepositoriesSummary Component', () => {
   /////////
   test('display all infos about repository', () => {
     render(<RepositoriesSummary repository={repository} />);
-    const stargazers_count = screen.getByText(repository.stargazers_count);
-    const open_issues = screen.getByText(
-      new RegExp(repository.open_issues, 'i')
-    );
-    const forks = screen.getByText(new RegExp(repository.forks, 'i'));
-    const language = screen.getByText(/javascript/i);
 
-    expect(stargazers_count).toBeInTheDocument();
-    expect(open_issues).toBeInTheDocument();
-    expect(forks).toBeInTheDocument();
-    expect(language).toBeInTheDocument();
+    ///////////
+    Object.values(repository).forEach((value) => {
+      const el = screen.getByText(new RegExp(value, 'i'));
+      expect(el).toBeInTheDocument();
+    });
   });
 });
