@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import RepositoriesListItem from './RepositoriesListItem';
 
+//const pause = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 describe('RepositoriesListItem Component', () => {
   const repository = {
     full_name: 'facebook/react',
@@ -20,13 +22,11 @@ describe('RepositoriesListItem Component', () => {
     );
   };
 
-  test('Show a link to the github repo homepage for the repository', () => {});
-  renderComponent();
-
-  //render(<RepositoriesListItem repository={repository} />);
-
-  //   Object.values(repository).forEach((value) => {
-  //     const el = screen.getByText(new RegExp(value, 'i'));
-  //     expect(el).toBeInTheDocument();
-  //   });
+  test('Show a link to the github repo homepage for the repository', async () => {
+    renderComponent();
+    const fileicon = await screen.findByRole('img', {
+      name: repository.language,
+    });
+    expect(fileicon).toBeInTheDocument();
+  });
 });
