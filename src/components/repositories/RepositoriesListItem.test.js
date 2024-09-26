@@ -11,7 +11,9 @@ describe('RepositoriesListItem Component', () => {
       full_name: 'facebook/react',
       language: 'javascript',
       description: 'Personal website for Aleksandar Cvetkovic',
-      owner: 'facebook',
+      owner: {
+        login: 'facebook',
+      },
       name: 'react',
       html_url: 'https://github.com/facebook/react',
     };
@@ -24,20 +26,42 @@ describe('RepositoriesListItem Component', () => {
 
     return {
       repository,
+      loadingFileIcon: async () =>
+        await screen.findByRole('img', {
+          name: repository.language,
+        }),
     };
   };
 
   test('Show a link to the github repo homepage for the repository', async () => {
-    const { repository } = renderComponent();
-    const fileicon = await screen.findByRole('img', {
-      name: repository.language,
-    });
-    expect(fileicon).toBeInTheDocument();
+    const { repository, loadingFileIcon } = renderComponent();
+    await loadingFileIcon();
 
-    const link = screen.getByRole('link', {
+    const link = await screen.findByRole('link', {
       name: /github repository/i,
     });
 
     expect(link).toHaveAttribute('href', repository.html_url);
+  });
+
+  test('Show a file icon with the correct name', async () => {
+    const { repository, loadingFileIcon } = renderComponent();
+    await loadingFileIcon();
+    const fileicon = await screen.findByRole('img', {
+      name: repository.language,
+    });
+    expect(fileicon).toBeInTheDocument();
+  });
+
+  test('Show repository top link', async () => {
+    const { repository, loadingFileIcon } = renderComponent();
+    await loadingFileIcon();
+    const titleLink = await screen.findByRole('link', {
+      name: new RegExp(repository.name, 'i'),
+    });
+    expect(titleLink).toHaveAttribute(
+      'href',
+      `/repositories/${repository.full_name}`
+    );
   });
 });
