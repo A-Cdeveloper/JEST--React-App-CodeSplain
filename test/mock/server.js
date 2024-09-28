@@ -9,7 +9,13 @@ export const createServer = (handlerConfig) => {
   });
 
   const server = setupServer(...handlers);
-  beforeAll(() => server.listen());
+  beforeAll(() => {
+    server.listen();
+    console.log('Server is starting');
+  });
   afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
+  afterAll(() => {
+    server.close();
+    console.log('Server is closing');
+  });
 };
